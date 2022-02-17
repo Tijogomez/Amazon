@@ -1,0 +1,1 @@
+enum TaskStatus { PENDING, COMPLETED, STARTED, PAUSED }
