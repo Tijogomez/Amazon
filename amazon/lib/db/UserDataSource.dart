@@ -30,4 +30,18 @@ class UserDataSource {
       return false;
     }
   }
+
+  updateUserPassword(String username, String confirmedPassword) {}
 }
+Future<bool> updateUserPassword(String username, String newPassword) async {
+    final Database db = await AmazonDatabase.instance.database;
+
+    try {
+      await db.rawUpdate(
+          "UPDATE $UserTableName SET password = ? WHERE username = ?",
+          [newPassword, username]);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }

@@ -1,4 +1,5 @@
 import 'package:amazon/db/UserDataSource.dart';
+import 'package:amazon/screens/forgot_password.dart';
 import 'package:amazon/screens/home_screen.dart';
 import 'package:amazon/screens/register_screen.dart';
 import 'package:flutter/material.dart';
@@ -28,15 +29,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: MediaQuery.of(context).size.height,
                 child: Column(children: <Widget>[
                   const SizedBox(
-                    height: 280.0,
+                    height: 220.0,
                   ),
                   const Text(
-                    'AmaZon',
+                    'Sign in',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 34.0,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 8.0,
+                      fontSize: 25.0,
+                      // fontWeight: FontWeight.bold,
+                      // letterSpacing: 8.0,
                     ),
                   ),
                   const SizedBox(height: 10.0),
@@ -80,6 +81,23 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: true,
                     ),
                   ),
+                  Padding(
+                padding: EdgeInsets.all(1.0),
+                child: TextButton(
+                  child: const Text(
+                    'Forgot Password',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                        context, MaterialPageRoute(builder: (_) => ForgotPW()));
+                  },
+                ),
+              ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

@@ -163,8 +163,15 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => const MapsScreen()))),
-                      child: const Text("Get delivery address"),
-                    )
+                      child: const Text("Get delivery address",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20.0
+                      ),),
+                    ),
+                    SizedBox(height: 50.0,),
+                    
+
                   ],
                 ),
               ));

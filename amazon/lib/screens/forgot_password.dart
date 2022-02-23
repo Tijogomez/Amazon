@@ -1,39 +1,33 @@
-import 'dart:ui';
-
 import 'package:amazon/db/UserDataSource.dart';
 import 'package:amazon/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatefulWidget {
+
+class ForgotPW extends StatefulWidget {
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  _ForgotPWState createState() => _ForgotPWState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
-  final items =['Supervisor', 'Administrator', 'Delivery Agent'];
-  String? value;
+class _ForgotPWState extends State<ForgotPW> {
   final UserDataSource dataSource = UserDataSource();
-  String username = "", password = "", confirmedPassword = "", email = "", phoneNumber ='';
 
-  Future<bool> registerUser() async {
+  String username = "", password = "", confirmedPassword = "";
+
+  Future<bool> updateUserPassword() async {
     if (username.isEmpty || password.isEmpty || confirmedPassword.isEmpty)
       return false;
 
-    if (password != confirmedPassword) return false;
-    await dataSource.createUser(username, password, email);
-    return true;
+    if (password != confirmedPassword) return false  ;
+
+    return await dataSource.updateUserPassword(username, confirmedPassword);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.tealAccent,
-        title: const Text(
-          'Sign Up Page',
-          style: TextStyle(color: Colors.black),
-        ),
+        title: Text('Forgot Password'),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -41,13 +35,13 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             children: <Widget>[
               const SizedBox(
-                height: 80.0,
+                height: 180.0,
               ),
               const Text(
-                'Register Here',
+                'Change Password Here',
                 style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 34.0,
+                  color: Colors.grey,
+                  fontSize: 20.0,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -62,7 +56,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                     fillColor: Colors.white,
                     filled: true,
-                    hintText: 'Username',
+                    hintText: 'UserName',
                     prefixIcon: Icon(
                       Icons.account_box,
                       size: 30.0,
@@ -70,50 +64,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                child: TextField(
-                  onChanged: (value) {
-                    email = value;
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: 'Email',
-                    prefixIcon: Icon(
-                      Icons.email,
-                      size: 30.0,
-                    ),
-                  ),
-                ),
-              ),
-                Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                child: TextField(
-                  onChanged: (value) {
-                    phoneNumber = value;
-                  },
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                    fillColor: Colors.white,
-                    filled: true,
-                    hintText: 'Phone Number',
-                    prefixIcon: Icon(
-                      Icons.phone,
-                      size: 30.0,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 25.0,top:8,bottom: 8),
-                child: Container(
-                  width: 385,
-                  child: DropdownButton<String>(icon:Icon(Icons.arrow_drop_down), hint: Text('Role'),  value: value,iconSize: 15, isExpanded: true,  items: items.map(buildMenuItem).toList(), onChanged: (value) => setState(() => this.value = value)  )),
-              ),
-              
-              
+              const SizedBox(height: 10.0),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: TextField(
@@ -124,7 +75,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     contentPadding: EdgeInsets.symmetric(vertical: 15.0),
                     fillColor: Colors.white,
                     filled: true,
-                    hintText: 'Password',
+                    hintText: 'Enter New Password',
                     prefixIcon: Icon(
                       Icons.lock,
                       size: 30.0,
@@ -154,22 +105,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              
-              const SizedBox(height: 10.0),
-            
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
-                child: GestureDetector(
+                child: TextButton(
                   child: const Text(
-                    'Create Account',
+                    'Update',
                     style: TextStyle(
-                      color: Colors.black,
+                      color: Colors.blueAccent,
                       fontSize: 23.0,
                     ),
                   ),
-                  onTap: () async {
-                    if (await registerUser()) {
+                  onPressed: () async {
+                    if (await updateUserPassword()) {
                       Navigator.of(context, rootNavigator: true)
                           .pushReplacement(
                         new CupertinoPageRoute(
@@ -178,13 +126,13 @@ class _RegisterPageState extends State<RegisterPage> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text('Registration Successful'),
+                          content: Text('Password updated!'),
                         ),
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: const Text('Registration Failed'),
+                          content: Text('Password updation failed!'),
                         ),
                       );
                     }
@@ -198,7 +146,3 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-DropdownMenuItem<String> buildMenuItem(String item)=> 
-DropdownMenuItem(value: item,
-child: Text( item),
- );
