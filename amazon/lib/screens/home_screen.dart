@@ -1,10 +1,13 @@
 import 'package:amazon/BloC/home_bloc.dart';
 import 'package:amazon/db/Tasks.dart';
+import 'package:amazon/db/UserDataSource.dart';
 import 'package:amazon/events/TaskListEvents.dart';
+import 'package:amazon/main.dart';
 import 'package:amazon/screens/AddEditTaskScreen.dart';
 import 'package:amazon/screens/log_screen.dart';
 import 'package:amazon/util/TaskStatus.dart';
 import 'package:amazon/widgets/custom_drawer.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -16,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _bloc = HomeBloc();
+  final user = UserDataSource.loggedInUser;
+  bool _expandSort = false;
 
   @override
   void initState() {
@@ -38,13 +43,58 @@ class _HomeScreenState extends State<HomeScreen> {
         iconTheme: IconThemeData(
           color: Theme.of(context).primaryColor,
         ),
-        title: const Text(
-          'AmAZoN',
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            letterSpacing: 5.0,
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              flex: 1,
+              child: PopupMenuButton(
+                onSelected: (value) {
+                  if (value == 'logout') {
+                    Navigator.of(context, rootNavigator: true).pushReplacement(
+                      new MaterialPageRoute(
+                        builder: (BuildContext context) => new MyApp(),
+                      ),
+                    );
+                  } else if (value == 'logger') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new LogScreen()));
+                  }
+                },
+                child: CircleAvatar(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.grey,
+                  child: Text("${user!.username.substring(0, 1)}"),
+                  radius: 20,
+                ),
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    child: Text("Logger"),
+                    value: "logger",
+                  ),
+                  PopupMenuItem(
+                    child: Text("Logout"),
+                    value: "logout",
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Text(
+                user!.username,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                ),
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(
@@ -55,7 +105,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      drawer: CustomDrawer(),
+      // drawer: CustomDrawer(),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: SingleChildScrollView(
@@ -66,9 +116,11 @@ class _HomeScreenState extends State<HomeScreen> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
                   children: [
                     const Text(
-                      'Tasks',
+                      'Active Tasks',
                       style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w600,
@@ -78,16 +130,51 @@ class _HomeScreenState extends State<HomeScreen> {
                     const SizedBox(
                       height: 50.0,
                     ),
+                    Ink(
+                      decoration: const ShapeDecoration(
+                        color: Colors.tealAccent,
+                        shape: CircleBorder(),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(Icons.filter_alt_outlined),
+                        onPressed: () {
+                          setState(() {
+                            _expandSort = !_expandSort;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                width: MediaQuery.of(context).size.width,
+                height:
+                    _expandSort ? MediaQuery.of(context).size.height * 0.07 : 0,
+                curve: Curves.ease,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
                     Padding(
-                      padding: const EdgeInsets.all(15.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0),
                       child: Theme(
                         data: Theme.of(context)
                             .copyWith(cardColor: Colors.tealAccent),
                         child: PopupMenuButton(
-                          child: const Text(
-                            "By Status",
-                            style: TextStyle(
-                              backgroundColor: Colors.tealAccent,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.tealAccent,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10.0)),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: const Text("By Status",
+                                  style: TextStyle(
+                                      color: Colors.blue,
+                                      fontWeight: FontWeight.w600)),
                             ),
                           ),
                           itemBuilder: (_) {
@@ -114,9 +201,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           _bloc.eventSink.add(OnCreatedDateFilterSelect(
                               date: date ?? DateTime.now()));
                         },
-                        child: const Text(
-                          "By Created Date",
-                          style: TextStyle(backgroundColor: Colors.tealAccent),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.tealAccent,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Text(
+                              "By Created Date",
+                            ),
+                          ),
                         )),
                     TextButton(
                         onPressed: () async {
@@ -129,9 +225,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           _bloc.eventSink.add(OnCompleteByDateFilterSelect(
                               date: date ?? DateTime.now()));
                         },
-                        child: const Text(
-                          "By Complete Date",
-                          style: TextStyle(backgroundColor: Colors.tealAccent),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.tealAccent,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Text(
+                              "By Completed Date ",
+                            ),
+                          ),
                         )),
                   ],
                 ),
@@ -183,20 +288,20 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: Stack(
         fit: StackFit.loose,
         children: [
-          Positioned(
-            bottom: 80,
-            right: 20,
-            child: Theme(
-              data: Theme.of(context).copyWith(highlightColor: Colors.black),
-              child: FloatingActionButton(
-                backgroundColor: Colors.tealAccent,
-                child: const Icon(Icons.local_activity),
-                onPressed: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const LogScreen())),
-                heroTag: "Log Fab",
-              ),
-            ),
-          ),
+          // Positioned(
+          //   bottom: 80,
+          //   right: 20,
+          //   child: Theme(
+          //     data: Theme.of(context).copyWith(highlightColor: Colors.black),
+          //     child: FloatingActionButton(
+          //       backgroundColor: Colors.tealAccent,
+          //       child: const Icon(Icons.local_activity),
+          //       onPressed: () => Navigator.push(context,
+          //           MaterialPageRoute(builder: (context) => const LogScreen())),
+          //       heroTag: "Log Fab",
+          //     ),
+          //   ),
+          // ),
           Positioned(
               bottom: 10,
               right: 20,

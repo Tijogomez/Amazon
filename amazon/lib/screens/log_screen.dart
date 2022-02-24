@@ -59,24 +59,32 @@ class _LogScreenState extends State<LogScreen> {
                             return Card(
                                 child: ListTile(
                               leading: Text(logs[index].username),
-                              title: Text(logs[index].event.name),
-                              subtitle: Text(DateFormat('dd-MM-yyyy').format(
-                                  DateTime.fromMillisecondsSinceEpoch(
-                                      logs[index].date))),
+                              title: Text(logs[index].event.name +
+                                  ' at ' +
+                                  DateFormat('dd-MM-yyyy').format(
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          logs[index].date))),
                             ));
                           }),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton(
                               onPressed: () async {
                                 _bloc.eventsink.add(OnPrevClick());
                               },
-                              child: const Text("Previous")),
+                              child: Icon(
+                                Icons.arrow_circle_left_sharp,
+                                size: 40,
+                              )),
                           TextButton(
                               onPressed: () async {
                                 _bloc.eventsink.add(OnNextClick());
                               },
-                              child: const Text("Next")),
+                              child: Icon(
+                                Icons.arrow_circle_right_sharp,
+                                size: 40,
+                              )),
                         ],
                       )
                     ],

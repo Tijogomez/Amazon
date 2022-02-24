@@ -52,7 +52,7 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                   if (task != null)
                     {
                       _bloc.eventsSink.add(OnTaskSubmit(task)),
-                      Navigator.push(
+                      Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const HomeScreen()))
@@ -158,20 +158,29 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                     //     ],
                     //   ),
                     // ),
-                    TextButton(
-                      onPressed: (() => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MapsScreen()))),
-                      child: const Text("Get delivery address",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20.0
-                      ),),
+                    Container(
+                      // color: Colors.tealAccent,
+                      decoration: BoxDecoration(
+                        color: Colors.tealAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: TextButton(
+                        onPressed: (() => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MapsScreen()))),
+                        child: const Text(
+                          "Get delivery address",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 50.0,),
-                    
-
+                    SizedBox(
+                      height: 50.0,
+                    ),
                   ],
                 ),
               ));

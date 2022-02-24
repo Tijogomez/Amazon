@@ -11,10 +11,14 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final items =['Supervisor', 'Administrator', 'Delivery Agent'];
+  final items = ['Supervisor', 'Administrator', 'Delivery Agent'];
   String? value;
   final UserDataSource dataSource = UserDataSource();
-  String username = "", password = "", confirmedPassword = "", email = "", phoneNumber ='';
+  String username = "",
+      password = "",
+      confirmedPassword = "",
+      email = "",
+      phoneNumber = '';
 
   Future<bool> registerUser() async {
     if (username.isEmpty || password.isEmpty || confirmedPassword.isEmpty)
@@ -88,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
-                Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: TextField(
                   onChanged: (value) {
@@ -107,13 +111,19 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 25.0,top:8,bottom: 8),
+                padding: const EdgeInsets.only(left: 25.0, top: 8, bottom: 8),
                 child: Container(
-                  width: 385,
-                  child: DropdownButton<String>(icon:Icon(Icons.arrow_drop_down), hint: Text('Role'),  value: value,iconSize: 15, isExpanded: true,  items: items.map(buildMenuItem).toList(), onChanged: (value) => setState(() => this.value = value)  )),
+                    width: 385,
+                    child: DropdownButton<String>(
+                        icon: Icon(Icons.arrow_drop_down),
+                        hint: Text('Role'),
+                        value: value,
+                        iconSize: 15,
+                        isExpanded: true,
+                        items: items.map(buildMenuItem).toList(),
+                        onChanged: (value) =>
+                            setState(() => this.value = value))),
               ),
-              
-              
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
                 child: TextField(
@@ -154,18 +164,29 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ),
               const SizedBox(height: 10.0),
-              
               const SizedBox(height: 10.0),
-            
               Padding(
                 padding: const EdgeInsets.symmetric(
                     horizontal: 20.0, vertical: 10.0),
                 child: GestureDetector(
-                  child: const Text(
-                    'Create Account',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 23.0,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.tealAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Text(
+                          'Create Account',
+                          style: TextStyle(
+                            backgroundColor: Colors.tealAccent,
+                            color: Colors.black,
+                            fontSize: 23.0,
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                   onTap: () async {
@@ -198,7 +219,8 @@ class _RegisterPageState extends State<RegisterPage> {
     );
   }
 }
-DropdownMenuItem<String> buildMenuItem(String item)=> 
-DropdownMenuItem(value: item,
-child: Text( item),
- );
+
+DropdownMenuItem<String> buildMenuItem(String item) => DropdownMenuItem(
+      value: item,
+      child: Text(item),
+    );

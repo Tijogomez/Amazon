@@ -3,7 +3,6 @@ import 'package:amazon/screens/login_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-
 class ForgotPW extends StatefulWidget {
   @override
   _ForgotPWState createState() => _ForgotPWState();
@@ -18,9 +17,9 @@ class _ForgotPWState extends State<ForgotPW> {
     if (username.isEmpty || password.isEmpty || confirmedPassword.isEmpty)
       return false;
 
-    if (password != confirmedPassword) return false  ;
+    if (password != confirmedPassword) return false;
 
-    return await dataSource.updateUserPassword(username, confirmedPassword);
+    return await dataSource.updateUserPassword(username, password);
   }
 
   @override
