@@ -145,19 +145,6 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                       ),
                     ),
                     SizedBox(height: 50.0),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(left: 25.0),
-                    //   child: Row(
-                    //     children: [
-                    //       const Text(
-                    //         "Pin:  ",
-                    //         style: TextStyle(
-                    //             fontSize: 18.0, fontWeight: FontWeight.w800),
-                    //       ),
-                    //       Text(task?.pin.toString() ?? "00")
-                    //     ],
-                    //   ),
-                    // ),
                     Container(
                       // color: Colors.tealAccent,
                       decoration: BoxDecoration(
