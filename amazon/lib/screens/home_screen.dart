@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:amazon/BloC/home_bloc.dart';
 import 'package:amazon/db/Tasks.dart';
 import 'package:amazon/db/UserDataSource.dart';
@@ -266,6 +268,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                     title: Text(
                                       _snapshotData[index].status.name,
                                     ),
+                                    // trailing: GridView.builder(
+                                    //   itemCount: _snapshotData[index]
+                                    //           .images
+                                    //           .isEmpty
+                                    //       ? 1
+                                    //       : _snapshotData[index].images.length,
+                                    //   gridDelegate:
+                                    //       SliverGridDelegateWithFixedCrossAxisCount(
+                                    //           crossAxisCount: 3),
+                                    //   itemBuilder: (context, index) =>
+                                    //       Container(
+                                    //     decoration: BoxDecoration(
+                                    //         color: Colors.white,
+                                    //         border: Border.all(
+                                    //             color: Colors.grey
+                                    //                 .withOpacity(0.5))),
+                                    //     child:
+                                    //         _snapshotData[index].images.isEmpty
+                                    //             ? Icon(
+                                    //                 CupertinoIcons.camera,
+                                    //                 color: Colors.grey
+                                    //                     .withOpacity(0.5),
+                                    //               )
+                                    //             : Image.memory(
+                                    //                 base64Decode(
+                                    //                     _snapshotData[index]
+                                    //                         .images[index]),
+                                    //                 fit: BoxFit.cover,
+                                    //               ),
+                                    //   ),
+                                    // ),
                                     tileColor: _bloc.getColorForStatus(
                                         _snapshotData[index].status),
                                     onTap: () {
@@ -274,8 +307,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           MaterialPageRoute(
                                             builder: (context) =>
                                                 AddEditTaskScreen(
-                                                    taskId: _snapshotData[index]
-                                                        .id),
+                                                    taskId:
+                                                        _snapshotData[index].id,
+                                                    images: _snapshotData[index]
+                                                        .images),
                                           ));
                                     }));
                           });
@@ -313,8 +348,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              const AddEditTaskScreen(taskId: -1))),
+                          builder: (context) => const AddEditTaskScreen(
+                                taskId: -1,
+                                images: [],
+                              ))),
                   heroTag: "Add Edit Task Fab",
                 ),
               )),

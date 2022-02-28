@@ -37,6 +37,7 @@ class AmazonDatabase {
       status TEXT NOT NULL,
       createdDate INTEGER NOT NULL,
       completeBeforeDate INTEGER NOT NULL,
+      images TEXT,
       pin INTEGER NOT NULL )
     ''');
 

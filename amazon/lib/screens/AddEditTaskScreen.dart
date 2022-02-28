@@ -1,17 +1,24 @@
+import 'dart:convert';
+
 import 'package:amazon/BloC/add_edit_task_bloc.dart';
 import 'package:amazon/db/Tasks.dart';
 import 'package:amazon/events/AddEditTaskEvents.dart';
 import 'package:amazon/screens/home_screen.dart';
 import 'package:amazon/screens/home_screen.dart';
 import 'package:amazon/util/TaskStatus.dart';
+import 'package:amazon/util/images.dart';
 import 'package:amazon/util/maps.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class AddEditTaskScreen extends StatefulWidget {
   final int taskId;
+  final List<String> images;
 
-  const AddEditTaskScreen({Key? key, required this.taskId}) : super(key: key);
+  const AddEditTaskScreen(
+      {Key? key, required this.taskId, required this.images})
+      : super(key: key);
 
   @override
   _AddEditTaskScreenState createState() => _AddEditTaskScreenState();
@@ -52,15 +59,14 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                   if (task != null)
                     {
                       _bloc.eventsSink.add(OnTaskSubmit(task)),
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const HomeScreen()))
+                      Navigator.pop(
+                        context,
+                      )
                     }
                 },
               ),
               body: Padding(
-                padding: const EdgeInsets.only(top: 50.0),
+                padding: const EdgeInsets.only(top: 30.0),
                 child: Column(
                   children: [
                     Padding(
@@ -144,6 +150,31 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                         ],
                       ),
                     ),
+                    Container(
+                      height: 150,
+                      child: GridView.builder(
+                        itemCount: task?.images.isEmpty ?? true
+                            ? 0
+                            : task!.images.length,
+                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3),
+                        itemBuilder: (context, index) => Container(
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                  color: Colors.grey.withOpacity(0.5))),
+                          child: task!.images.isEmpty
+                              ? Icon(
+                                  CupertinoIcons.camera,
+                                  color: Colors.grey.withOpacity(0.5),
+                                )
+                              : Image.memory(
+                                  base64Decode(task.images[index]),
+                                  fit: BoxFit.cover,
+                                ),
+                        ),
+                      ),
+                    ),
                     SizedBox(height: 50.0),
                     Container(
                       // color: Colors.tealAccent,
@@ -166,7 +197,32 @@ class _AddEditTaskScreenState extends State<AddEditTaskScreen> {
                       ),
                     ),
                     SizedBox(
-                      height: 50.0,
+                      height: 30.0,
+                    ),
+                    Container(
+                      // color: Colors.tealAccent,
+                      decoration: BoxDecoration(
+                        color: Colors.tealAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: TextButton(
+                        onPressed: (() async {
+                          List<String>? images = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const ImageScreen()));
+                          print("Images - $images");
+                          _bloc.eventsSink
+                              .add(OnImageSelect(task!.copy(images: images)));
+                        }),
+                        child: const Text(
+                          "Add images here",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 20.0,
+                          ),
+                        ),
+                      ),
                     ),
                   ],
                 ),

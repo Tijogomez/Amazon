@@ -31,9 +31,7 @@ class UserDataSource {
     }
   }
 
-  updateUserPassword(String username, String confirmedPassword) {}
-}
-Future<bool> updateUserPassword(String username, String newPassword) async {
+  Future<bool> updateUserPassword(String username, String newPassword) async {
     final Database db = await AmazonDatabase.instance.database;
 
     try {
@@ -45,3 +43,17 @@ Future<bool> updateUserPassword(String username, String newPassword) async {
       return false;
     }
   }
+
+  Future<bool> loginUser() async {
+    final Database db = await AmazonDatabase.instance.database;
+
+    final result =
+        await db.query(UserTableName, columns: UserColumns, limit: 1);
+    if (result.isNotEmpty) {
+      loggedInUser = User.fromJson(result[0]);
+      return true;
+    } else {
+      return false;
+    }
+  }
+}

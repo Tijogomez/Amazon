@@ -82,22 +82,22 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                   ),
                   Padding(
-                padding: EdgeInsets.all(1.0),
-                child: TextButton(
-                  child: const Text(
-                    'Forgot Password',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
+                    padding: EdgeInsets.all(1.0),
+                    child: TextButton(
+                      child: const Text(
+                        'Forgot Password',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onPressed: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (_) => ForgotPW()));
+                      },
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.push(
-                        context, MaterialPageRoute(builder: (_) => ForgotPW()));
-                  },
-                ),
-              ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: GestureDetector(

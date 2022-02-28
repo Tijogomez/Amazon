@@ -29,10 +29,12 @@ class AddEditTaskBloc extends Bloc {
     final bool isNewTask = taskId == -1;
     if (isNewTask) {
       final defaultTask = Tasks(
-          name: "",
-          pin: int.parse(generatePassword()),
-          createdDate: DateTime.now().millisecondsSinceEpoch,
-          completeBeforeDate: DateTime.now().millisecondsSinceEpoch);
+        name: "",
+        pin: int.parse(generatePassword()),
+        createdDate: DateTime.now().millisecondsSinceEpoch,
+        completeBeforeDate: DateTime.now().millisecondsSinceEpoch,
+        images: [],
+      );
 
       _taskController.sink.add(defaultTask);
     } else {
@@ -73,6 +75,8 @@ class AddEditTaskBloc extends Bloc {
       _hasStatusChanged = true;
     } else if (event is OnCompleteBeforeDateChange) {
       _taskController.sink.add(event.task);
+    } else if (event is OnImageSelect) {
+      _taskController.sink.add(event.task!);
     }
   }
 

@@ -21,3 +21,8 @@ class OnTaskSubmit extends AddEditTaskEvents {
   Tasks? task;
   OnTaskSubmit(this.task);
 }
+
+class OnImageSelect extends AddEditTaskEvents {
+  Tasks? task;
+  OnImageSelect(this.task);
+}
