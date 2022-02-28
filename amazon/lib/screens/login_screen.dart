@@ -2,6 +2,7 @@ import 'package:amazon/db/UserDataSource.dart';
 import 'package:amazon/screens/forgot_password.dart';
 import 'package:amazon/screens/home_screen.dart';
 import 'package:amazon/screens/register_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -12,8 +13,16 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool isLoggedIn = false;
   bool isLoading = false;
   final UserDataSource dataSource = UserDataSource();
+
+  setLoggedIn(String username) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setBool('isLoggedIn', true);
+    prefs.setString('userName', username);
+    print("Logged in");
+  }
 
   String username = "", password = "";
 
@@ -107,6 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             isLoading = true;
                           });
                           if (await loginUser()) {
+                            setLoggedIn(username);
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(

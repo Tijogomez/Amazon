@@ -69,7 +69,7 @@ class AddEditTaskBloc extends Bloc {
       _taskController.sink.add(event.task);
     } else if (event is OnTaskSubmit) {
       _dataSource.addTask(event.task!);
-      _logEvent(event.task!.status);
+      _logEvent(event.task!.status, event.task!.name);
     } else if (event is OnTaskStatusChange) {
       _taskController.sink.add(event.task);
       _hasStatusChanged = true;
@@ -80,9 +80,9 @@ class AddEditTaskBloc extends Bloc {
     }
   }
 
-  void _logEvent(TaskStatus event) async {
+  void _logEvent(TaskStatus event, String name) async {
     if (_hasStatusChanged) {
-      _logger.logEvent(event);
+      _logger.logEvent(event, name);
     }
   }
 

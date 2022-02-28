@@ -46,7 +46,8 @@ class AmazonDatabase {
       id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
       username TEXT NOT NULL,
       event TEXT NOT NULL,
-      date INTEGER NOT NULL )
+      date INTEGER NOT NULL,
+      name TEXT NOT NULL )
     ''');
   }
 

@@ -44,16 +44,17 @@ class UserDataSource {
     }
   }
 
-  Future<bool> loginUser() async {
+  Future<User?> loginUser(String username) async {
     final Database db = await AmazonDatabase.instance.database;
 
-    final result =
-        await db.query(UserTableName, columns: UserColumns, limit: 1);
+    final result = await db.query(UserTableName,
+        columns: UserColumns,
+        limit: 1,
+        where: 'username=?',
+        whereArgs: [username]);
     if (result.isNotEmpty) {
       loggedInUser = User.fromJson(result[0]);
-      return true;
-    } else {
-      return false;
     }
+    return loggedInUser;
   }
 }

@@ -60,6 +60,8 @@ class _LogScreenState extends State<LogScreen> {
                                 child: ListTile(
                               leading: Text(logs[index].username),
                               title: Text(logs[index].event.name +
+                                  " " +
+                                  logs[index].name +
                                   ' at ' +
                                   DateFormat('dd-MM-yyyy').format(
                                       DateTime.fromMillisecondsSinceEpoch(
