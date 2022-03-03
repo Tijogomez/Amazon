@@ -23,7 +23,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _bloc = HomeBloc();
-  bool _expandSort = false;
 
   Future<User?> getUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -131,139 +130,27 @@ class _HomeScreenState extends State<HomeScreen> {
             // drawer: CustomDrawer(),
             body: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          const Text(
-                            'Active Tasks',
-                            style: TextStyle(
-                              fontSize: 20.0,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 1.0,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  TaskHeader(blocData: _bloc),
+                  StreamBuilder<List<Tasks>>(
+                      stream: _bloc.tasks,
+                      initialData: const [],
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Tasks>> snapshot) {
+                        final _snapshotData = snapshot.data;
+                        if (_snapshotData == null) {
+                          return const Padding(
+                            padding: EdgeInsets.only(top: 50.0),
+                            child: Center(
+                              child: CircularProgressIndicator(),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 50.0,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 15.0),
-                            child: Theme(
-                              data: Theme.of(context)
-                                  .copyWith(cardColor: Colors.tealAccent),
-                              child: PopupMenuButton(
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    color: Colors.tealAccent,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(10.0)),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: const Text("By Status",
-                                        style: TextStyle(
-                                            color: Colors.blue,
-                                            fontWeight: FontWeight.w600)),
-                                  ),
-                                ),
-                                itemBuilder: (_) {
-                                  return TaskStatus.values
-                                      .map((status) => PopupMenuItem(
-                                          child: Text(status.name),
-                                          onTap: () {
-                                            _bloc.eventSink.add(
-                                                OnStatusFilterSelect(
-                                                    status: status));
-                                          }))
-                                      .toList();
-                                },
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                              onPressed: () async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1022),
-                                    lastDate: DateTime(3022));
-
-                                _bloc.eventSink.add(OnCreatedDateFilterSelect(
-                                    date: date ?? DateTime.now()));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.tealAccent,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    "By Created Date",
-                                  ),
-                                ),
-                              )),
-                          TextButton(
-                              onPressed: () async {
-                                final date = await showDatePicker(
-                                    context: context,
-                                    initialDate: DateTime.now(),
-                                    firstDate: DateTime(1022),
-                                    lastDate: DateTime(3022));
-
-                                _bloc.eventSink.add(
-                                    OnCompleteByDateFilterSelect(
-                                        date: date ?? DateTime.now()));
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.tealAccent,
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10.0)),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: const Text(
-                                    "By Completed Date ",
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
-                    ),
-                    StreamBuilder<List<Tasks>>(
-                        stream: _bloc.tasks,
-                        initialData: const [],
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Tasks>> snapshot) {
-                          final _snapshotData = snapshot.data;
-                          if (_snapshotData == null) {
-                            return const Padding(
-                              padding: EdgeInsets.only(top: 50.0),
-                              child: Center(
-                                child: CircularProgressIndicator(),
-                              ),
-                            );
-                          } else {
-                            return ListView.builder(
+                          );
+                        } else {
+                          return Container(
+                            height: MediaQuery.of(context).size.height * 0.65,
+                            child: ListView.builder(
                                 scrollDirection: Axis.vertical,
                                 shrinkWrap: true,
                                 itemCount: _snapshotData.length,
@@ -322,11 +209,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               .images),
                                                 ));
                                           }));
-                                });
-                          }
-                        }),
-                  ],
-                ),
+                                }),
+                          );
+                        }
+                      }),
+                ],
               ),
             ),
             floatingActionButton: Stack(
@@ -347,7 +234,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   ),
                 // ),
                 Positioned(
-                    bottom: 10,
+                    bottom: 5,
                     right: 20,
                     child: Theme(
                       data: Theme.of(context)
@@ -367,7 +254,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     )),
               ],
             ),
-            floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
           );
         } else {
           return const Scaffold(
@@ -377,6 +265,155 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
       },
+    );
+  }
+}
+
+class TaskHeader extends StatefulWidget {
+  HomeBloc blocData;
+
+  TaskHeader({Key? key, required this.blocData}) : super(key: key);
+
+  @override
+  State<TaskHeader> createState() => _TaskHeaderState();
+}
+
+class _TaskHeaderState extends State<TaskHeader> {
+  bool _expandSort = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                const Text(
+                  'Active Tasks',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 1.0,
+                  ),
+                ),
+                const SizedBox(
+                  height: 50.0,
+                ),
+                Ink(
+                  decoration: const ShapeDecoration(
+                    color: Colors.tealAccent,
+                    shape: CircleBorder(),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.sort),
+                    color: Colors.white,
+                    onPressed: () {
+                      setState(() {
+                        _expandSort = !_expandSort;
+                      });
+                    },
+                  ),
+                )
+              ],
+            ),
+          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 500),
+            height: _expandSort ? 60 : 0,
+            curve: Curves.easeInOut,
+            width: MediaQuery.of(context).size.width,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Theme(
+                    data: Theme.of(context)
+                        .copyWith(cardColor: Colors.tealAccent),
+                    child: PopupMenuButton(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.tealAccent,
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: const Text("By Status",
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                      itemBuilder: (_) {
+                        return TaskStatus.values
+                            .map((status) => PopupMenuItem(
+                                child: Text(status.name),
+                                onTap: () {
+                                  widget.blocData.eventSink.add(
+                                      OnStatusFilterSelect(status: status));
+                                }))
+                            .toList();
+                      },
+                    ),
+                  ),
+                ),
+                TextButton(
+                    onPressed: () async {
+                      final date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1022),
+                          lastDate: DateTime(3022));
+
+                      widget.blocData.eventSink.add(OnCreatedDateFilterSelect(
+                          date: date ?? DateTime.now()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.tealAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Text(
+                          "By Created Date",
+                        ),
+                      ),
+                    )),
+                TextButton(
+                    onPressed: () async {
+                      final date = await showDatePicker(
+                          context: context,
+                          initialDate: DateTime.now(),
+                          firstDate: DateTime(1022),
+                          lastDate: DateTime(3022));
+
+                      widget.blocData.eventSink.add(
+                          OnCompleteByDateFilterSelect(
+                              date: date ?? DateTime.now()));
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.tealAccent,
+                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: const Text(
+                          "By Completed Date ",
+                        ),
+                      ),
+                    )),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
