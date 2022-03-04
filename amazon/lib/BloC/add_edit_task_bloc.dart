@@ -99,7 +99,7 @@ class AddEditTaskBloc extends Bloc {
   }
 
   String generatePassword() {
-    final length = 4;
+    final length = 3;
     final numbers = '0123456789';
 
     String num = '';

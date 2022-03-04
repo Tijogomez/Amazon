@@ -157,11 +157,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                 itemBuilder: (BuildContext context, int index) {
                                   return Card(
                                       child: ListTile(
-                                          leading:
-                                              Text(_snapshotData[index].name),
-                                          title: Text(
-                                            _snapshotData[index].status.name,
+                                          leading: Text(
+                                            _snapshotData[index].pin.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                           ),
+                                          title: Text(
+                                            _snapshotData[index].name +
+                                                "       " +
+                                                _snapshotData[index]
+                                                    .status
+                                                    .name,
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                          // trailing: Text(
+                                          //   _snapshotData[index].status.name,
+                                          // ),
                                           // trailing: GridView.builder(
                                           //   itemCount: _snapshotData[index]
                                           //           .images
