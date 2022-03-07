@@ -9,6 +9,7 @@ class Tasks {
   final List<String> images;
   final int pin;
   final int completeBeforeDate;
+  final String description;
 
   const Tasks(
       {required this.name,
@@ -17,7 +18,8 @@ class Tasks {
       required this.createdDate,
       required this.completeBeforeDate,
       this.images = const [],
-      required this.pin});
+      required this.pin,
+      required this.description});
 
   Map<String, Object?> toJson(bool isNew) {
     if (isNew) {
@@ -27,7 +29,8 @@ class Tasks {
         'createdDate': createdDate,
         'completeBeforeDate': completeBeforeDate,
         'images': json.encode(images),
-        'pin': pin
+        'pin': pin,
+        'description': description
       };
     } else {
       return {
@@ -37,7 +40,8 @@ class Tasks {
         'createdDate': createdDate,
         'completeBeforeDate': completeBeforeDate,
         'images': json.encode(images),
-        'pin': pin
+        'pin': pin,
+        'description': description
       };
     }
   }
@@ -51,13 +55,15 @@ class Tasks {
       pin: jsonObj['pin'] as int,
       images: (json.decode(jsonObj['images'] as String) as List)
           .map((e) => e as String)
-          .toList());
+          .toList(),
+      description: jsonObj['description'] as String);
 
   Tasks copy(
           {String? name,
           TaskStatus? status,
           int? completeBeforeDate,
-          List<String>? images}) =>
+          List<String>? images,
+          String? description}) =>
       Tasks(
           id: id,
           name: name ?? this.name,
@@ -65,7 +71,8 @@ class Tasks {
           createdDate: createdDate,
           completeBeforeDate: completeBeforeDate ?? this.completeBeforeDate,
           images: images ?? this.images,
-          pin: pin);
+          pin: pin,
+          description: description ?? this.description);
 }
 
 const List<String> TasksColumns = [
@@ -75,7 +82,8 @@ const List<String> TasksColumns = [
   'createdDate',
   'completeBeforeDate',
   'pin',
-  'images'
+  'images',
+  'description'
 ];
 
 const TasksTableName = "Tasks";

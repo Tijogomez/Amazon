@@ -117,10 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                           if (await loginUser()) {
                             setLoggedIn(username);
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                               context,
-                              MaterialPageRoute(
-                                  builder: (_) => const HomeScreen()),
+                              MaterialPageRoute(builder: (_) => HomeScreen()),
+                              (_) => false,
                             );
                           } else {
                             setState(() {

@@ -38,7 +38,8 @@ class AmazonDatabase {
       createdDate INTEGER NOT NULL,
       completeBeforeDate INTEGER NOT NULL,
       images TEXT,
-      pin INTEGER NOT NULL )
+      pin INTEGER NOT NULL,
+      description TEXT )
     ''');
 
     await db.execute('''

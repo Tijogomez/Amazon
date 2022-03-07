@@ -23,6 +23,7 @@ class _ImageScreenState extends State<ImageScreen> {
           title: const Text('Add Images'),
         ),
         floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.save),
           onPressed: () => Navigator.pop(context, images),
         ),
         body: Container(
@@ -33,7 +34,7 @@ class _ImageScreenState extends State<ImageScreen> {
             child: GridView.builder(
               itemCount: images!.isEmpty ? 1 : images!.length,
               gridDelegate:
-                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3),
+                  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
               itemBuilder: (context, index) => Container(
                 decoration: BoxDecoration(
                     color: Colors.white,

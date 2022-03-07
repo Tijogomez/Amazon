@@ -1,9 +1,6 @@
-import 'dart:io';
-
 import 'package:amazon/screens/home_screen.dart';
 import 'package:amazon/screens/login_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:amazon/db/UserDataSource.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {

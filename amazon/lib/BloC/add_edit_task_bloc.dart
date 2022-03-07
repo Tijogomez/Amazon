@@ -34,6 +34,7 @@ class AddEditTaskBloc extends Bloc {
         createdDate: DateTime.now().millisecondsSinceEpoch,
         completeBeforeDate: DateTime.now().millisecondsSinceEpoch,
         images: [],
+        description: "",
       );
 
       _taskController.sink.add(defaultTask);
@@ -77,13 +78,13 @@ class AddEditTaskBloc extends Bloc {
       _taskController.sink.add(event.task);
     } else if (event is OnImageSelect) {
       _taskController.sink.add(event.task!);
+    } else if (event is OnDescriptionChange) {
+      _taskController.sink.add(event.task!);
     }
   }
 
   void _logEvent(TaskStatus event, String name) async {
-    if (_hasStatusChanged) {
-      _logger.logEvent(event, name);
-    }
+    _logger.logEvent(event, name);
   }
 
   AddEditTaskBloc() {

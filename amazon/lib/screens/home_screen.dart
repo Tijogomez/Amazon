@@ -7,10 +7,9 @@ import 'package:amazon/db/UserDataSource.dart';
 import 'package:amazon/events/TaskListEvents.dart';
 import 'package:amazon/main.dart';
 import 'package:amazon/screens/AddEditTaskScreen.dart';
+import 'package:amazon/screens/create_task_page.dart';
 import 'package:amazon/screens/log_screen.dart';
 import 'package:amazon/util/TaskStatus.dart';
-import 'package:amazon/widgets/custom_drawer.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -56,67 +55,59 @@ class _HomeScreenState extends State<HomeScreen> {
           User? user = snapshot.data as User?;
           return Scaffold(
             appBar: AppBar(
+              automaticallyImplyLeading: false,
               centerTitle: true,
               backgroundColor: Colors.tealAccent,
               iconTheme: IconThemeData(
                 color: Theme.of(context).primaryColor,
               ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: PopupMenuButton(
-                      onSelected: (value) {
-                        if (value == 'logout') {
-                          setLoggedOut();
-                          Navigator.of(context, rootNavigator: true)
-                              .pushReplacement(
-                            new MaterialPageRoute(
-                              builder: (BuildContext context) => new MyApp(),
-                            ),
-                          );
-                        } else if (value == 'logger') {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (BuildContext context) =>
-                                      new LogScreen()));
-                        }
-                      },
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.grey,
-                        child: Text(
-                          user?.username.substring(0, 1) ?? 'U',
+              leading: Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: PopupMenuButton(
+                  onSelected: (value) {
+                    if (value == 'logout') {
+                      setLoggedOut();
+                      Navigator.of(context, rootNavigator: true)
+                          .pushReplacement(
+                        new MaterialPageRoute(
+                          builder: (BuildContext context) => new MyApp(),
                         ),
-                        radius: 20,
-                      ),
-                      itemBuilder: (context) => [
-                        PopupMenuItem(
-                          child: Text("Logger"),
-                          value: "logger",
-                        ),
-                        PopupMenuItem(
-                          child: Text("Logout"),
-                          value: "logout",
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 2,
+                      );
+                    } else if (value == 'logger') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new LogScreen()));
+                    }
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.grey,
                     child: Text(
-                      user?.username ?? "User",
-                      style: TextStyle(
-                        color: Colors.black,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 2.0,
-                      ),
+                      user?.username.substring(0, 1) ?? 'U',
                     ),
+                    radius: 20,
                   ),
-                ],
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      child: Text("Logger"),
+                      value: "logger",
+                    ),
+                    PopupMenuItem(
+                      child: Text("Logout"),
+                      value: "logout",
+                    ),
+                  ],
+                ),
+              ),
+              title: Text(
+                user?.username ?? "User",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 2.0,
+                ),
               ),
               actions: [
                 IconButton(
@@ -130,106 +121,183 @@ class _HomeScreenState extends State<HomeScreen> {
             // drawer: CustomDrawer(),
             body: Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  TaskHeader(blocData: _bloc),
-                  StreamBuilder<List<Tasks>>(
-                      stream: _bloc.tasks,
-                      initialData: const [],
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<Tasks>> snapshot) {
-                        final _snapshotData = snapshot.data;
-                        if (_snapshotData == null) {
-                          return const Padding(
-                            padding: EdgeInsets.only(top: 50.0),
-                            child: Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                          );
-                        } else {
-                          return Container(
-                            height: MediaQuery.of(context).size.height * 0.65,
-                            child: ListView.builder(
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: _snapshotData.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  return Card(
-                                      child: ListTile(
-                                          leading: Text(
-                                            _snapshotData[index].pin.toString(),
-                                            style: const TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          title: Text(
-                                            _snapshotData[index].name +
-                                                "       " +
-                                                _snapshotData[index]
-                                                    .status
-                                                    .name,
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                          // trailing: Text(
-                                          //   _snapshotData[index].status.name,
-                                          // ),
-                                          // trailing: GridView.builder(
-                                          //   itemCount: _snapshotData[index]
-                                          //           .images
-                                          //           .isEmpty
-                                          //       ? 1
-                                          //       : _snapshotData[index].images.length,
-                                          //   gridDelegate:
-                                          //       SliverGridDelegateWithFixedCrossAxisCount(
-                                          //           crossAxisCount: 3),
-                                          //   itemBuilder: (context, index) =>
-                                          //       Container(
-                                          //     decoration: BoxDecoration(
-                                          //         color: Colors.white,
-                                          //         border: Border.all(
-                                          //             color: Colors.grey
-                                          //                 .withOpacity(0.5))),
-                                          //     child:
-                                          //         _snapshotData[index].images.isEmpty
-                                          //             ? Icon(
-                                          //                 CupertinoIcons.camera,
-                                          //                 color: Colors.grey
-                                          //                     .withOpacity(0.5),
-                                          //               )
-                                          //             : Image.memory(
-                                          //                 base64Decode(
-                                          //                     _snapshotData[index]
-                                          //                         .images[index]),
-                                          //                 fit: BoxFit.cover,
-                                          //               ),
-                                          //   ),
-                                          // ),
-                                          tileColor: _bloc.getColorForStatus(
-                                              _snapshotData[index].status),
-                                          onTap: () {
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      AddEditTaskScreen(
-                                                          taskId: _snapshotData[
-                                                                  index]
-                                                              .id,
-                                                          images: _snapshotData[
-                                                                  index]
-                                                              .images),
-                                                ));
-                                          }));
-                                }),
-                          );
-                        }
-                      }),
-                ],
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    TaskHeader(blocData: _bloc),
+                    StreamBuilder<List<Tasks>>(
+                        stream: _bloc.tasks,
+                        initialData: const [],
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Tasks>> snapshot) {
+                          final _snapshotData = snapshot.data;
+                          if (_snapshotData == null) {
+                            return const Padding(
+                              padding: EdgeInsets.only(top: 50.0),
+                              child: Center(
+                                child: CircularProgressIndicator(),
+                              ),
+                            );
+                          } else {
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Container(
+                                        width: 40,
+                                        child: Text(
+                                          "ID",
+                                          style: TextStyle(fontSize: 17),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          "Taskname",
+                                          style: TextStyle(fontSize: 17),
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          "Status",
+                                          style: TextStyle(fontSize: 17),
+                                          textAlign: TextAlign.end,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  // height:
+                                  //     MediaQuery.of(context).size.height * 0.65,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ListView.builder(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: _snapshotData.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return InkWell(
+                                          onTap: () => Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AddEditTaskScreen(
+                                                        taskId:
+                                                            _snapshotData[index]
+                                                                .id,
+                                                        images:
+                                                            _snapshotData[index]
+                                                                .images),
+                                              )),
+                                          child: Card(
+                                              color: _bloc.getColorForStatus(
+                                                  _snapshotData[index].status),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(14.0),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  children: [
+                                                    Container(
+                                                      child: Text(
+                                                        _snapshotData[index]
+                                                            .pin
+                                                            .toString(),
+                                                        style: const TextStyle(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.6,
+                                                      child: Text(
+                                                        _snapshotData[index]
+                                                            .name,
+                                                        style: const TextStyle(
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Container(
+                                                      child: Text(
+                                                        _snapshotData[index]
+                                                            .status
+                                                            .name,
+                                                      ),
+                                                    ),
+                                                    // ListTile(
+                                                    //     leading: Text(
+                                                    //       _snapshotData[index]
+                                                    //           .pin
+                                                    //           .toString(),
+                                                    //       style: const TextStyle(
+                                                    //         fontSize: 18,
+                                                    //         fontWeight: FontWeight.bold,
+                                                    //       ),
+                                                    //     ),
+                                                    //     title: Text(
+                                                    //       _snapshotData[index].name +
+                                                    //           "       " +
+                                                    //           _snapshotData[index]
+                                                    //               .status
+                                                    //               .name,
+                                                    //       style: const TextStyle(
+                                                    //         fontSize: 15,
+                                                    //         fontWeight: FontWeight.w500,
+                                                    //       ),
+                                                    //     ),
+                                                    //     tileColor:
+                                                    //         _bloc.getColorForStatus(
+                                                    //             _snapshotData[index]
+                                                    //                 .status),
+                                                    //     onTap: () {
+                                                    //       Navigator.push(
+                                                    //           context,
+                                                    //           MaterialPageRoute(
+                                                    //             builder: (context) =>
+                                                    //                 AddEditTaskScreen(
+                                                    //                     taskId:
+                                                    //                         _snapshotData[
+                                                    //                                 index]
+                                                    //                             .id,
+                                                    //                     images:
+                                                    //                         _snapshotData[
+                                                    //                                 index]
+                                                    //                             .images),
+                                                    //           ));
+                                                    //     }),
+                                                  ],
+                                                ),
+                                              )),
+                                        );
+                                      }),
+                                ),
+                              ],
+                            );
+                          }
+                        }),
+                  ],
+                ),
               ),
             ),
             floatingActionButton: Stack(
@@ -261,11 +329,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const AddEditTaskScreen(
+                                builder: (context) => const CreateTask(
                                       taskId: -1,
-                                      images: [],
                                     ))),
-                        heroTag: "Add Edit Task Fab",
+                        heroTag: "Create Task Fab",
                       ),
                     )),
               ],
@@ -339,19 +406,58 @@ class _TaskHeaderState extends State<TaskHeader> {
           ),
           AnimatedContainer(
             duration: const Duration(milliseconds: 500),
-            height: _expandSort ? 60 : 0,
+            height: _expandSort ? 50 : 0,
             curve: Curves.easeInOut,
             width: MediaQuery.of(context).size.width,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                  child: Theme(
-                    data: Theme.of(context)
-                        .copyWith(cardColor: Colors.tealAccent),
-                    child: PopupMenuButton(
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: Theme(
+                      data: Theme.of(context).copyWith(cardColor: Colors.white),
+                      child: PopupMenuButton(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.tealAccent,
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10.0)),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: const Text("By Status",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w600)),
+                          ),
+                        ),
+                        itemBuilder: (_) {
+                          return TaskStatus.values
+                              .map((status) => PopupMenuItem(
+                                  child: Text(status.name),
+                                  onTap: () {
+                                    widget.blocData.eventSink.add(
+                                        OnStatusFilterSelect(status: status));
+                                  }))
+                              .toList();
+                        },
+                      ),
+                    ),
+                  ),
+                  TextButton(
+                      onPressed: () async {
+                        final date = await showDatePicker(
+                            context: context,
+                            initialDate: DateTime.now(),
+                            firstDate: DateTime(1022),
+                            lastDate: DateTime(3022));
+
+                        widget.blocData.eventSink.add(OnCreatedDateFilterSelect(
+                            date: date ?? DateTime.now()));
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.tealAccent,
@@ -359,49 +465,15 @@ class _TaskHeaderState extends State<TaskHeader> {
                         ),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: const Text("By Status",
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w600)),
+                          child: const Text(
+                            "By Created Date",
+                            style: TextStyle(
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
-                      itemBuilder: (_) {
-                        return TaskStatus.values
-                            .map((status) => PopupMenuItem(
-                                child: Text(status.name),
-                                onTap: () {
-                                  widget.blocData.eventSink.add(
-                                      OnStatusFilterSelect(status: status));
-                                }))
-                            .toList();
-                      },
-                    ),
-                  ),
-                ),
-                TextButton(
-                    onPressed: () async {
-                      final date = await showDatePicker(
-                          context: context,
-                          initialDate: DateTime.now(),
-                          firstDate: DateTime(1022),
-                          lastDate: DateTime(3022));
-
-                      widget.blocData.eventSink.add(OnCreatedDateFilterSelect(
-                          date: date ?? DateTime.now()));
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.tealAccent,
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: const Text(
-                          "By Created Date",
-                        ),
-                      ),
-                    )),
-                TextButton(
+                      )),
+                  TextButton(
                     onPressed: () async {
                       final date = await showDatePicker(
                           context: context,
@@ -422,10 +494,32 @@ class _TaskHeaderState extends State<TaskHeader> {
                         padding: const EdgeInsets.all(8.0),
                         child: const Text(
                           "By Completed Date ",
+                          style: TextStyle(
+                            color: Colors.black,
+                          ),
                         ),
                       ),
-                    )),
-              ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => widget.blocData.eventSink.add(OnRefresh()),
+                    child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.red,
+                          borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Clear Filters",
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        )),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

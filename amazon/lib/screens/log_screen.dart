@@ -26,6 +26,20 @@ class _LogScreenState extends State<LogScreen> {
     super.dispose();
   }
 
+  MaterialColor getColorForStatus(String status) {
+    switch (status) {
+      case "PENDING":
+        return Colors.red;
+      case "COMPLETED":
+        return Colors.green;
+      case "STARTED":
+        return Colors.yellow;
+      case "PAUSED":
+        return Colors.grey;
+    }
+    return Colors.grey;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +52,6 @@ class _LogScreenState extends State<LogScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
         child: StreamBuilder<List<Log>>(
             initialData: const [],
             stream: _bloc.logs,
@@ -52,21 +65,43 @@ class _LogScreenState extends State<LogScreen> {
                   child: Column(
                     children: [
                       ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
                           itemCount: logs.length,
                           itemBuilder: (BuildContext context, int index) {
                             return Card(
                                 child: ListTile(
-                              leading: Text(logs[index].username),
-                              title: Text(logs[index].event.name +
-                                  " " +
-                                  logs[index].name +
-                                  ' at ' +
-                                  DateFormat('dd-MM-yyyy').format(
-                                      DateTime.fromMillisecondsSinceEpoch(
-                                          logs[index].date))),
-                            ));
+                                    leading: Text(
+                                      logs[index].username,
+                                      style: TextStyle(
+                                          fontSize: 18.0,
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                                    title: RichText(
+                                        text: TextSpan(
+                                            style: TextStyle(
+                                              fontSize: 18.0,
+                                              color: Colors.black,
+                                            ),
+                                            children: <TextSpan>[
+                                          TextSpan(
+                                            text: logs[index].event.name + '  ',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                color: getColorForStatus(
+                                                    logs[index].event.name)),
+                                          ),
+                                          TextSpan(
+                                            text: logs[index].name + '  ',
+                                          ),
+                                          TextSpan(text: ' at '),
+                                          TextSpan(
+                                              text: DateFormat('dd-MM-yyyy')
+                                                  .format(DateTime
+                                                      .fromMillisecondsSinceEpoch(
+                                                          logs[index].date))),
+                                        ]))));
                           }),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

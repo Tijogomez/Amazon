@@ -30,4 +30,4 @@ class Logger {
   }
 }
 
-const int PAGE_SIZE = 8;
+const int PAGE_SIZE = 10;

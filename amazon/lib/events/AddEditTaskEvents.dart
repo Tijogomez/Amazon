@@ -26,3 +26,8 @@ class OnImageSelect extends AddEditTaskEvents {
   Tasks? task;
   OnImageSelect(this.task);
 }
+
+class OnDescriptionChange extends AddEditTaskEvents {
+  Tasks? task;
+  OnDescriptionChange(this.task);
+}
