@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         future: checkIfLoggedIn(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            return isLoggedIn ? HomeScreen() : LoginScreen();
+            return isLoggedIn ? const HomeScreen() : const LoginScreen();
           } else {
             return Scaffold(
               body: Center(

@@ -1,13 +1,17 @@
 import 'package:amazon/BloC/add_edit_task_bloc.dart';
+import 'package:amazon/BloC/home_bloc.dart';
 import 'package:amazon/db/Tasks.dart';
 import 'package:amazon/events/AddEditTaskEvents.dart';
+import 'package:amazon/events/TaskListEvents.dart';
 import 'package:amazon/util/maps.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class CreateTask extends StatefulWidget {
   final int taskId;
-  const CreateTask({Key? key, required this.taskId}) : super(key: key);
+  final HomeBloc homeBloc;
+  const CreateTask({Key? key, required this.taskId, required this.homeBloc})
+      : super(key: key);
 
   @override
   State<CreateTask> createState() => _CreateTaskState();
@@ -30,7 +34,7 @@ class _CreateTaskState extends State<CreateTask> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.tealAccent,
+        backgroundColor: Colors.orangeAccent,
         title: Text(" Add Task",
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
       ),
@@ -45,16 +49,16 @@ class _CreateTaskState extends State<CreateTask> {
               descController.value.copyWith(text: task?.description);
           return Scaffold(
             floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.tealAccent,
+              backgroundColor: Colors.orangeAccent,
               child: const Icon(Icons.save),
-              onPressed: () => {
-                if (task != null)
-                  {
-                    _bloc.eventsSink.add(OnTaskSubmit(task)),
-                    Navigator.pop(
-                      context,
-                    )
-                  }
+              onPressed: () {
+                if (task != null) {
+                  _bloc.eventsSink.add(OnTaskSubmit(task));
+                  widget.homeBloc.eventSink.add(OnRefresh());
+                  Navigator.pop(
+                    context,
+                  );
+                }
               },
             ),
             body: Padding(
@@ -138,9 +142,9 @@ class _CreateTaskState extends State<CreateTask> {
                     height: 25.0,
                   ),
                   Container(
-                    // color: Colors.tealAccent,
+                    // color: Colors.orangeAccent,
                     decoration: BoxDecoration(
-                      color: Colors.tealAccent,
+                      color: Colors.orangeAccent,
                       borderRadius: BorderRadius.all(Radius.circular(10.0)),
                     ),
                     child: TextButton(

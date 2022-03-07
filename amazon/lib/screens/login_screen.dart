@@ -141,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           alignment: Alignment.center,
                           height: 45.0,
                           decoration: BoxDecoration(
-                            color: Colors.tealAccent,
+                            color: Colors.orangeAccent,
                             borderRadius: BorderRadius.circular(20.0),
                           ),
                           child: isLoading
@@ -174,7 +174,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             Container(
                               alignment: Alignment.center,
-                              color: Colors.tealAccent,
+                              color: Colors.orangeAccent,
                               height: 50.0,
                               child: const Text(
                                 'Sign Up',
