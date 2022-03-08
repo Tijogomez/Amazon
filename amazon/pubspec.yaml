@@ -47,6 +47,7 @@ dependencies:
   shared_preferences: ^2.0.13
   email_validator: ^2.0.1
   flutter_bloc: ^8.0.1
+  geocoding: ^2.0.2
 
 dev_dependencies:
   flutter_test:

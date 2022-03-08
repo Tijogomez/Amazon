@@ -16,6 +16,10 @@ class OnCompleteBeforeDateChange extends AddEditTaskEvents {
   Tasks task;
   OnCompleteBeforeDateChange({required this.task});
 }
+class OnLocationChange extends AddEditTaskEvents {
+  Tasks task;
+  OnLocationChange({required this.task});
+}
 
 class OnTaskSubmit extends AddEditTaskEvents {
   Tasks? task;

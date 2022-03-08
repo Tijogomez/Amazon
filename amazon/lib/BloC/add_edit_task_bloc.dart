@@ -76,6 +76,8 @@ class AddEditTaskBloc extends Bloc {
       _hasStatusChanged = true;
     } else if (event is OnCompleteBeforeDateChange) {
       _taskController.sink.add(event.task);
+    } else if (event is OnLocationChange) {
+      _taskController.sink.add(event.task);
     } else if (event is OnImageSelect) {
       _taskController.sink.add(event.task!);
     } else if (event is OnDescriptionChange) {

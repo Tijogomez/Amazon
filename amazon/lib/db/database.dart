@@ -39,7 +39,9 @@ class AmazonDatabase {
       completeBeforeDate INTEGER NOT NULL,
       images TEXT,
       pin INTEGER NOT NULL,
-      description TEXT )
+      description TEXT,
+      latitude REAL,
+      longitude REAL )
     ''');
 
     await db.execute('''
