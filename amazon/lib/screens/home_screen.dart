@@ -109,14 +109,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   letterSpacing: 2.0,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    _bloc.eventSink.add(OnRefresh());
-                  },
-                ),
-              ],
+              // actions: [
+              //   IconButton(
+              //     icon: const Icon(Icons.refresh),
+              //     onPressed: () {
+              //       _bloc.eventSink.add(OnRefresh());
+              //     },
+              //   ),
+              // ],
             ),
             // drawer: CustomDrawer(),
             body: Padding(
