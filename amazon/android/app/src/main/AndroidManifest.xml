@@ -1,5 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.amazon">
+    <uses-permission android:name="android.permission.INTERNET"/>
+        <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="amazon"
         android:name="${applicationName}"

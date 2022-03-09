@@ -57,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             appBar: AppBar(
               automaticallyImplyLeading: false,
               centerTitle: true,
-              backgroundColor: Colors.tealAccent,
+              backgroundColor: Colors.orangeAccent,
               iconTheme: IconThemeData(
                 color: Theme.of(context).primaryColor,
               ),
@@ -109,14 +109,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   letterSpacing: 2.0,
                 ),
               ),
-              actions: [
-                IconButton(
-                  icon: const Icon(Icons.refresh),
-                  onPressed: () {
-                    _bloc.eventSink.add(OnRefresh());
-                  },
-                ),
-              ],
+              // actions: [
+              //   IconButton(
+              //     icon: const Icon(Icons.refresh),
+              //     onPressed: () {
+              //       _bloc.eventSink.add(OnRefresh());
+              //     },
+              //   ),
+              // ],
             ),
             // drawer: CustomDrawer(),
             body: Padding(
@@ -144,7 +144,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 15.0),
+                                    horizontal: 15.0,
+                                  ),
                                   child: Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
@@ -190,12 +191,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     AddEditTaskScreen(
-                                                        taskId:
-                                                            _snapshotData[index]
-                                                                .id,
-                                                        images:
-                                                            _snapshotData[index]
-                                                                .images),
+                                                  taskId:
+                                                      _snapshotData[index].id,
+                                                  images: _snapshotData[index]
+                                                      .images,
+                                                  homeBloc: _bloc,
+                                                ),
                                               )),
                                           child: Card(
                                               color: _bloc.getColorForStatus(
@@ -309,7 +310,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 //   child: Theme(
                 //     data: Theme.of(context).copyWith(highlightColor: Colors.black),
                 //     child: FloatingActionButton(
-                //       backgroundColor: Colors.tealAccent,
+                //       backgroundColor: Colors.orangeAccent,
                 //       child: const Icon(Icons.local_activity),
                 //       onPressed: () => Navigator.push(context,
                 //           MaterialPageRoute(builder: (context) => const LogScreen())),
@@ -324,13 +325,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       data: Theme.of(context)
                           .copyWith(highlightColor: Colors.black),
                       child: FloatingActionButton(
-                        backgroundColor: Colors.tealAccent,
+                        backgroundColor: Colors.orangeAccent,
                         child: const Icon(Icons.add),
                         onPressed: () => Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const CreateTask(
+                                builder: (context) => CreateTask(
                                       taskId: -1,
+                                      homeBloc: _bloc,
                                     ))),
                         heroTag: "Create Task Fab",
                       ),
@@ -388,7 +390,7 @@ class _TaskHeaderState extends State<TaskHeader> {
                 ),
                 Ink(
                   decoration: const ShapeDecoration(
-                    color: Colors.tealAccent,
+                    color: Colors.orangeAccent,
                     shape: CircleBorder(),
                   ),
                   child: IconButton(
@@ -422,7 +424,7 @@ class _TaskHeaderState extends State<TaskHeader> {
                       child: PopupMenuButton(
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.tealAccent,
+                            color: Colors.orangeAccent,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0)),
                           ),
@@ -460,7 +462,7 @@ class _TaskHeaderState extends State<TaskHeader> {
                       },
                       child: Container(
                         decoration: BoxDecoration(
-                          color: Colors.tealAccent,
+                          color: Colors.orangeAccent,
                           borderRadius: BorderRadius.all(Radius.circular(10.0)),
                         ),
                         child: Padding(
@@ -487,7 +489,7 @@ class _TaskHeaderState extends State<TaskHeader> {
                     },
                     child: Container(
                       decoration: BoxDecoration(
-                        color: Colors.tealAccent,
+                        color: Colors.orangeAccent,
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       child: Padding(

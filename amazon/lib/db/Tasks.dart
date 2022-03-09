@@ -1,10 +1,14 @@
 import 'package:amazon/util/TaskStatus.dart';
 import 'dart:convert';
 
+import 'package:geolocator/geolocator.dart';
+
 class Tasks {
   final int id;
   final String name;
   final TaskStatus status;
+  final double latitude;
+  final double longitude;
   final int createdDate;
   final List<String> images;
   final int pin;
@@ -18,6 +22,8 @@ class Tasks {
       required this.createdDate,
       required this.completeBeforeDate,
       this.images = const [],
+      this.latitude =0.0,
+      this.longitude=0.0,
       required this.pin,
       required this.description});
 
@@ -30,7 +36,9 @@ class Tasks {
         'completeBeforeDate': completeBeforeDate,
         'images': json.encode(images),
         'pin': pin,
-        'description': description
+        'description': description,
+        'latitude': latitude,
+        'longitude':longitude
       };
     } else {
       return {
@@ -41,7 +49,9 @@ class Tasks {
         'completeBeforeDate': completeBeforeDate,
         'images': json.encode(images),
         'pin': pin,
-        'description': description
+        'description': description,
+        'latitude': latitude,
+        'longitude':longitude
       };
     }
   }
@@ -56,14 +66,17 @@ class Tasks {
       images: (json.decode(jsonObj['images'] as String) as List)
           .map((e) => e as String)
           .toList(),
-      description: jsonObj['description'] as String);
+      description: jsonObj['description'] as String,
+      latitude: jsonObj['latitude'] as double,
+      longitude: jsonObj['longitude'] as double);
 
   Tasks copy(
           {String? name,
           TaskStatus? status,
           int? completeBeforeDate,
           List<String>? images,
-          String? description}) =>
+          String? description, double? latitude,
+          double? longitude}) =>
       Tasks(
           id: id,
           name: name ?? this.name,
@@ -72,7 +85,9 @@ class Tasks {
           completeBeforeDate: completeBeforeDate ?? this.completeBeforeDate,
           images: images ?? this.images,
           pin: pin,
-          description: description ?? this.description);
+          description: description ?? this.description,
+          latitude: latitude??this.latitude,
+          longitude: longitude??this.longitude);
 }
 
 const List<String> TasksColumns = [
@@ -83,7 +98,9 @@ const List<String> TasksColumns = [
   'completeBeforeDate',
   'pin',
   'images',
-  'description'
+  'description',
+  'latitude',
+  'longitude'
 ];
 
 const TasksTableName = "Tasks";

@@ -36,7 +36,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.tealAccent,
+        backgroundColor: Colors.orangeAccent,
         title: const Text(
           'Sign Up Page',
           style: TextStyle(color: Colors.black),
@@ -222,7 +222,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: Colors.tealAccent,
+                            color: Colors.orangeAccent,
                             borderRadius:
                                 BorderRadius.all(Radius.circular(10.0)),
                           ),
@@ -231,7 +231,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             child: const Text(
                               'Create Account',
                               style: TextStyle(
-                                backgroundColor: Colors.tealAccent,
                                 color: Colors.black,
                                 fontSize: 23.0,
                               ),

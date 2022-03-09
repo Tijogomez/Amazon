@@ -45,7 +45,7 @@ class _LogScreenState extends State<LogScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.tealAccent,
+        backgroundColor: Colors.orangeAccent,
         title: Text(
           "Logger",
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
@@ -86,7 +86,9 @@ class _LogScreenState extends State<LogScreen> {
                                             ),
                                             children: <TextSpan>[
                                           TextSpan(
-                                            text: logs[index].event.name + '  ',
+                                            text: getTextForStatus(
+                                                    logs[index].event.name) +
+                                                '  ',
                                             style: TextStyle(
                                                 fontWeight: FontWeight.bold,
                                                 color: getColorForStatus(
@@ -131,5 +133,14 @@ class _LogScreenState extends State<LogScreen> {
             }),
       ),
     );
+  }
+}
+
+getTextForStatus(String name) {
+  switch (name) {
+    case "PENDING":
+      return 'CREATED';
+    default:
+      return name;
   }
 }
