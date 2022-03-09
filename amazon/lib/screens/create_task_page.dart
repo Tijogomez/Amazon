@@ -63,170 +63,173 @@ class _CreateTaskState extends State<CreateTask> {
                 }
               },
             ),
-            body: Padding(
-              padding: const EdgeInsets.only(top: 30.0),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20.0, vertical: 10.0),
-                    child: TextFormField(
-                      controller: textController,
-                      onChanged: (value) {
-                        if (task != null) {
-                          _bloc.eventsSink.add(
-                              OnTaskNameChange(task: task.copy(name: value)));
-                        }
-                      },
-                      decoration: const InputDecoration(
-                        contentPadding: EdgeInsets.symmetric(vertical: 15.0),
-                        fillColor: Colors.white,
-                        filled: true,
-                        hintText: 'Task Name',
-                        prefixIcon: Icon(
-                          Icons.task,
-                          size: 30.0,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 30.0),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      child: TextFormField(
+                        controller: textController,
+                        onChanged: (value) {
+                          if (task != null) {
+                            _bloc.eventsSink.add(
+                                OnTaskNameChange(task: task.copy(name: value)));
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          contentPadding: EdgeInsets.symmetric(vertical: 15.0),
+                          fillColor: Colors.white,
+                          filled: true,
+                          hintText: 'Task Name',
+                          prefixIcon: Icon(
+                            Icons.task,
+                            size: 30.0,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: TextFormField(
-                          controller: descController,
-                          onChanged: (value) {
-                            if (task != null) {
-                              _bloc.eventsSink.add(OnDescriptionChange(
-                                  task.copy(description: value)));
-                            }
-                          },
-                          maxLines: 5,
-                          decoration: InputDecoration.collapsed(
-                              hintText: "Add description"),
-                        ),
-                      ),
+                    SizedBox(
+                      height: 25.0,
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 25.0),
-                    child: Row(
-                      children: [
-                        Text(
-                          "CompleteBeforeDate: ${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(task?.completeBeforeDate ?? 0))}",
-                          style: const TextStyle(
-                              fontSize: 18.0, fontWeight: FontWeight.w800),
-                        ),
-                        IconButton(
-                            onPressed: () async {
-                              final date = await showDatePicker(
-                                  context: context,
-                                  initialDate: DateTime.now(),
-                                  firstDate: DateTime.now(),
-                                  lastDate: DateTime(3022));
-
-                              _bloc.eventsSink.add(OnCompleteBeforeDateChange(
-                                  task: task!.copy(
-                                      completeBeforeDate:
-                                          date?.millisecondsSinceEpoch)));
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: descController,
+                            onChanged: (value) {
+                              if (task != null) {
+                                _bloc.eventsSink.add(OnDescriptionChange(
+                                    task.copy(description: value)));
+                              }
                             },
-                            icon: const Icon(Icons.calendar_today))
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.0,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: Row(children: [
-                      Expanded(
-                        child: Container(
-                          height: 80,
-                          child: TextField(
-                            keyboardType: TextInputType.multiline,
-                            controller: locationTextController,
-                            style: const TextStyle(
-                                fontSize: 16, color: Colors.black),
-                            decoration: const InputDecoration(
-                                hintText: 'Select delivery location from map',
-                                border: OutlineInputBorder(
-                                    borderSide: BorderSide(
-                                        width: 2.0,
-                                        color: Colors.orangeAccent)),
-                                prefixIcon: Icon(Icons.location_city,
-                                    color: Colors.orangeAccent)),
-                            enabled: false,
-                            maxLines: null,
-                            minLines: null,
-                            expands: true,
+                            maxLines: 5,
+                            decoration: InputDecoration.collapsed(
+                                hintText: "Add description"),
                           ),
                         ),
                       ),
-                      Container(
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.orangeAccent,
-                            width: 1,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 25.0),
+                      child: Row(
+                        children: [
+                          Text(
+                            "CompleteBeforeDate: ${DateFormat('dd-MM-yyyy').format(DateTime.fromMillisecondsSinceEpoch(task?.completeBeforeDate ?? 0))}",
+                            style: const TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.w800),
+                          ),
+                          IconButton(
+                              onPressed: () async {
+                                final date = await showDatePicker(
+                                    context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(3022));
+
+                                _bloc.eventsSink.add(OnCompleteBeforeDateChange(
+                                    task: task!.copy(
+                                        completeBeforeDate:
+                                            date?.millisecondsSinceEpoch)));
+                              },
+                              icon: const Icon(Icons.calendar_today))
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.0,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                      child: Row(children: [
+                        Expanded(
+                          child: Container(
+                            height: 80,
+                            child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              controller: locationTextController,
+                              style: const TextStyle(
+                                  fontSize: 16, color: Colors.black),
+                              decoration: const InputDecoration(
+                                  hintText: 'Select delivery location from map',
+                                  border: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          width: 2.0,
+                                          color: Colors.orangeAccent)),
+                                  prefixIcon: Icon(Icons.location_city,
+                                      color: Colors.orangeAccent)),
+                              enabled: false,
+                              maxLines: null,
+                              minLines: null,
+                              expands: true,
+                            ),
                           ),
                         ),
-                        child: IconButton(
-                          onPressed: (() async {
-                            final value = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const MapsScreen()));
-
-                            setTextLocation(value);
-                            _bloc.eventsSink.add(OnLocationChange(
-                                task: task!.copy(
-                                    latitude: value.latitude,
-                                    longitude: value.longitude)));
-                          }),
-                          icon: Icon(
-                            Icons.location_on_outlined,
-                            size: 35,
+                        Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.orangeAccent,
+                              width: 1,
+                            ),
                           ),
-                        ),
-                      )
-                    ]),
-                  )
-                  // Container(
-                  //   // color: Colors.orangeAccent,
-                  //   decoration: BoxDecoration(
-                  //     color: Colors.orangeAccent,
-                  //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                  //   ),
-                  //   child: TextButton(
-                  // onPressed: (() {
-                  //   final result = Navigator.push(
-                  //       context,
-                  //       MaterialPageRoute(
-                  //           builder: (context) => const MapsScreen()));
-                  //   result.then((value) {
-                  //      _bloc.eventsSink.add(OnLocationChange(
-                  //       task: task!.copy(latitude: value.latitude, longitude: value.longitude)));
-                  //   });
+                          child: IconButton(
+                            onPressed: (() async {
+                              final value = await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const MapsScreen()));
 
-                  //     }),
-                  //     child: const Text(
-                  //       "Get delivery address",
-                  //       style: TextStyle(
-                  //         color: Colors.black,
-                  //         fontSize: 20.0,
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                ],
+                              setTextLocation(value);
+                              _bloc.eventsSink.add(OnLocationChange(
+                                  task: task!.copy(
+                                      latitude: value.latitude,
+                                      longitude: value.longitude)));
+                            }),
+                            icon: Icon(
+                              Icons.location_on_outlined,
+                              size: 35,
+                            ),
+                          ),
+                        )
+                      ]),
+                    )
+                    // Container(
+                    //   // color: Colors.orangeAccent,
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.orangeAccent,
+                    //     borderRadius: BorderRadius.all(Radius.circular(10.0)),
+                    //   ),
+                    //   child: TextButton(
+                    // onPressed: (() {
+                    //   final result = Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //           builder: (context) => const MapsScreen()));
+                    //   result.then((value) {
+                    //      _bloc.eventsSink.add(OnLocationChange(
+                    //       task: task!.copy(latitude: value.latitude, longitude: value.longitude)));
+                    //   });
+
+                    //     }),
+                    //     child: const Text(
+                    //       "Get delivery address",
+                    //       style: TextStyle(
+                    //         color: Colors.black,
+                    //         fontSize: 20.0,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
           );
